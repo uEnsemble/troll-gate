@@ -1,0 +1,20 @@
+{
+  "name": "troll-gate",
+  "version": "0.0.1",
+  "description": "Express app to randomly succeed or fail on GET",
+  "main": "app/index.js",
+  "dependencies": {
+    "coinflip": "^1.0.0",
+    "express": "^4.14.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.9.1"
+  },
+  "scripts": {
+    "build": "npm shrinkwrap",
+    "test": "eslint app/",
+    "start": "node app/index.js"
+  },
+  "author": "",
+  "license": "MIT"
+}

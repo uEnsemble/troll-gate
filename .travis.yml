@@ -1,0 +1,42 @@
+sudo: required
+
+language: node_js
+
+# test on two node.js versions: 0.6 and 0.8
+node_js:
+  - "6"
+
+services:
+  - docker
+
+
+before_install:
+  # Pull container.
+  - sudo apt-get -qq update
+#  - 'docker pull webdevops/ansible:alpine-3'
+  - sudo apt-get install ansible virtualenv
+
+  #Install cloudfoundry
+  - bash  bin/setup.sh
+
+script:
+  - npm test
+  - npm build
+#  - docker run -t   webdevops/ansible:alpine-3 ansible --help
+
+
+deploy:
+  provider: script
+  script:
+    - cf --help
+    - bash bin/deploy2bm.sh
+#    - docker run -t   webdevops/ansible:alpine-3 ansible --help
+
+  on:
+    branch: testTravis
+
+
+# configure notifications (email, IRC, campfire etc)
+# please update this section to your needs!
+#notifications:
+#  irc: "irc.freenode.org#travis"
