@@ -6,30 +6,37 @@ language: node_js
 node_js:
   - "6"
 
-services:
-  - docker
+# services:
+#   - docker
 
 
 before_install:
-  # Pull container.
-  - sudo apt-get -qq update
-#  - 'docker pull webdevops/ansible:alpine-3'
-  - sudo apt-get install ansible virtualenv
-
   #Install cloudfoundry
   - bash  bin/setup.sh
+  # Pull container.
+  # - sudo apt-get -qq update
+  # - 'docker pull webdevops/ansible:alpine-3'
+#  - sudo apt-get install ansible
+  - bash bin/ansibleSetup.sh
+#  - sudo apt-get install python-virtualenv
+
+
 
 script:
   - npm test
+
+after_success:
   - npm build
 #  - docker run -t   webdevops/ansible:alpine-3 ansible --help
 
 
 deploy:
+  #provide: ansible?
   provider: script
+  skip_cleanup: true
   script:
-    - cf --help
-    - bash bin/deploy2bm.sh
+    - bin/deploy2bm.sh
+#    - bin/deploy2bm.sh
 #    - docker run -t   webdevops/ansible:alpine-3 ansible --help
 
   on:
