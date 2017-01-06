@@ -1,72 +1,36 @@
-sudo: required
-
 language: node_js
 
-# test on two node.js versions: 0.6 and 0.8
 node_js:
   - "6"
-
-# services:
-#   - docker
-
-before_install:
-  #Install cloudfoundry
-  - bash  bin/setup.sh
-  # Pull container.
-  # - sudo apt-get -qq update
-  # - 'docker pull webdevops/ansible:alpine-3'
-#  - sudo apt-get install ansible
-  - bash bin/ansibleSetup.sh
-#  - sudo apt-get install python-virtualenv
-
-
+  
+env:
+  global:
+    - WORKFLOW_NAME="sync_build_join2"
+    - TASK_NAME="build1"
 
 script:
   - npm test
 
 after_success:
   - npm build
-#  - docker run -t   webdevops/ansible:alpine-3 ansible --help
 
-
-# deploy:
-#   #provide: ansible?
-#   provider: script
-#   skip_cleanup: true
-#   script:
-#     # - bin/deploy2bm.sh
-#     - bin/moveOver.sh
-#
-#   on:
-#     branch: testTravis
-
-
-# configure notifications (email, IRC, campfire etc)
-# please update this section to your needs!
-#notifications:
-#  irc: "irc.freenode.org#travis"
+before_deploy:
+  - mkdir -p tmp && tar -czvf tmp/troll-gate.tz . --exclude "node_modules" --exclude ".git" --exclude "tmp"
 
 deploy:
   - provider: script
+    script: ./tagrelease.sh
     skip_cleanup: true
-    script:
-      - bin/copy2S3.sh
     on:
-      all_branches: true
+      branch: master
 
-  - provider: s3
-    bucket: "thetodd"
+  - provider: releases
+    api_key: "$GITHUB_OAUTH_TOKEN"
+    file: "tmp/troll-gate.tz"
     skip_cleanup: true
-    local_dir: ./s3
-  # - provider: script
-  #   <TOWER STUFF HERE>
     on:
-      all_branches: true
-  - provider: script
-    skip_cleanup: true
-    script:
-      - bin/moveOver.sh
-    on:
-      all_branches: true
+      branch: master
+
 after_deploy:
-  - bin/afterDeploy.sh
+  - git clone https://github.com/uEnsemble/oneshotConductor.git
+  - cd oneshotConductor && npm start
