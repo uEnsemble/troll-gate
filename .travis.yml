@@ -2,7 +2,7 @@ language: node_js
 
 node_js:
   - "6"
-  
+
 env:
   global:
     - WORKFLOW_NAME="sync_build_join2"
@@ -19,7 +19,7 @@ before_deploy:
 
 deploy:
   - provider: script
-    script: ./tagrelease.sh
+    script: bin/tagrelease.sh
     skip_cleanup: true
     on:
       branch: master
