@@ -19,7 +19,7 @@ before_deploy:
 
 deploy:
   - provider: script
-    script: bin/tagrelease.sh
+    script: ./tagrelease.sh
     skip_cleanup: true
     on:
       branch: master
