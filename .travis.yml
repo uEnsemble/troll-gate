@@ -17,7 +17,7 @@ after_success:
 
 before_deploy:
   - mkdir -p tmp && tar -czvf "tmp/$ARTIFACT_NAME" . --exclude "node_modules" --exclude ".git" --exclude "tmp"
-  - ./tagrelease.sh
+  - . ./tagrelease.sh
 
 deploy:
   - provider: releases
