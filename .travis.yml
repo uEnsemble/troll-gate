@@ -7,6 +7,7 @@ env:
   global:
     - WORKFLOW_NAME="sync_build_join2"
     - TASK_NAME="build1"
+    - ARTIFACT_NAME="troll-gate.tz"
 
 script:
   - npm test
@@ -15,13 +16,13 @@ after_success:
   - npm build
 
 before_deploy:
-  - mkdir -p tmp && tar -czvf tmp/troll-gate.tz . --exclude "node_modules" --exclude ".git" --exclude "tmp"
+  - mkdir -p tmp && tar -czvf "tmp/$ARTIFACT_NAME" . --exclude "node_modules" --exclude ".git" --exclude "tmp"
   - ./tagrelease.sh
 
 deploy:
   - provider: releases
     api_key: "$GITHUB_OAUTH_TOKEN"
-    file: "tmp/troll-gate.tz"
+    file: "tmp/$ARTIFACT_NAME"
     skip_cleanup: true
     on:
       branch: master
