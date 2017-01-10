@@ -28,5 +28,5 @@ deploy:
       branch: master
 
 after_deploy:
-  - git clone https://github.com/uEnsemble/oneshotConductor.git
-  - cd oneshotConductor && npm install && npm start
+  # - git clone https://github.com/uEnsemble/oneshotConductor.git
+  # - cd oneshotConductor && npm install && npm start
