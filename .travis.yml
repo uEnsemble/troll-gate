@@ -29,4 +29,4 @@ deploy:
 
 after_deploy:
   # - git clone https://github.com/uEnsemble/oneshotConductor.git
-  # - cd oneshotConductor && npm install && npm startgit
+  # - cd oneshotConductor && npm install && npm start
